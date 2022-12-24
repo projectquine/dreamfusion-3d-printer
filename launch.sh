@@ -2,7 +2,7 @@
 ngrok config add-authtoken YOUR_NGROK_TOKEN
 
 # Start ngrok in the background
-ngrok http 80 &
+ngrok http 8000 &
 
 # Start the dreamfusion API
 uvicorn main:app --reload
