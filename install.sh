@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Install missing pybind11.h file for pytorch
-sudo apt-get update && sudo apt-get install pybind11-dev python3-pybind11
+sudo apt-get update && sudo apt-get install pybind11-dev python3-pybind11 jq
 
 #Install ngrok
 curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | \
