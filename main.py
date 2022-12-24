@@ -32,7 +32,7 @@ async def create_model(model: Model, request: Request, background_tasks: Backgro
     print(cmd)
     background_tasks.add_task(run_training, cmd)
     print(request.url)
-    return URL(uri=f'{request.url}/{model.workspace}')
+    return URL(uri=f'{request.url}{model.workspace}')
 
 @app.get("/model/{uuid}/obj")
 async def get_object_file(uuid):
@@ -62,8 +62,9 @@ async def get_result_video_file(uuid):
 @app.get("/model/{uuid}/validation")
 async def get_latest_validation_file(uuid):
     dir_path = os.getcwd() +'/'+ uuid + '/validation'
-    files = glob.glob(dir_path+'/*.png')
+    files = glob.glob(dir_path+'/*_rgb.png')
     files.sort(key=lambda x: os.path.getmtime(x))
+    print(files)
     if files == []:
         raise HTTPException(status_code=404, detail="File not found")
     return FileResponse(files[0])

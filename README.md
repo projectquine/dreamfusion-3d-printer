@@ -7,7 +7,7 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "text": "A toy car"
+  "text": "A plastic toy car"
 }'
 ```
 This will return us a uri with a uuid that we will use for later requests, so keep that handy.
