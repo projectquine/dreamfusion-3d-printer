@@ -22,7 +22,7 @@ async def root():
     return {"message": "Hello World"}
 
 async def run_training(model):
-    proc = await asyncio.create_subprocess_shell(f'python {df_working_directory}/main.py --text "{model.text}" --workspace {model.workspace} --iters {model.iterations}', stdout=asyncio.subprocess.PIPE)
+    proc = await asyncio.create_subprocess_shell(f'python {df_working_directory}/main.py --text "{model.text}" --workspace {model.workspace} -O --iters {model.iterations}', stdout=asyncio.subprocess.PIPE)
     stdout, stderr = await proc.communicate()
     print(stdout)
     generate = await asyncio.create_subprocess_shell(f'python {df_working_directory}/main.py --workspace {model.workspace} -O --test --save_mesh')
