@@ -1,4 +1,4 @@
-import asyncio, glob, os
+import asyncio, glob, os, time
 from uuid import UUID, uuid4
 from fastapi import FastAPI, HTTPException, Request, BackgroundTasks
 from fastapi.responses import FileResponse
@@ -11,8 +11,9 @@ class Model(BaseModel):
     workspace: UUID = Field(default_factory=uuid4)
     iterations = 10000
 
-class URL(BaseModel):
+class RUN(BaseModel):
     uri: str
+    time: str
 
 app = FastAPI()
 
@@ -32,7 +33,8 @@ async def create_model(model: Model, request: Request, background_tasks: Backgro
     print(cmd)
     background_tasks.add_task(run_training, cmd)
     print(request.url)
-    return URL(uri=f'{request.url}{model.workspace}')
+    projected_time = (model.iterations/100)*20
+    return RUN(uri=f'{request.url}{model.workspace}', time=time.strftime("%H:%M:%S", time.gmtime(projected_time)))
 
 @app.get("/model/{uuid}/obj")
 async def get_object_file(uuid):
@@ -62,9 +64,10 @@ async def get_result_video_file(uuid):
 @app.get("/model/{uuid}/validation")
 async def get_latest_validation_file(uuid):
     dir_path = os.getcwd() +'/'+ uuid + '/validation'
+    print(dir_path)
     files = glob.glob(dir_path+'/*_rgb.png')
     files.sort(key=lambda x: os.path.getmtime(x))
     print(files)
     if files == []:
         raise HTTPException(status_code=404, detail="File not found")
-    return FileResponse(files[0])
+    return FileResponse(files[-1])
