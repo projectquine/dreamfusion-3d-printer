@@ -1,6 +1,6 @@
 import asyncio, glob, os
 from uuid import UUID, uuid4
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, BackgroundTasks
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
@@ -20,16 +20,18 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
+async def run_training(cmd):
+    proc = await asyncio.create_subprocess_shell(cmd, stdout=asyncio.subprocess.PIPE)
+    stdout, stderr = await proc.communicate()
+    print(stdout)
+
 @app.post("/model/")
-async def create_model(model: Model, request: Request):
+async def create_model(model: Model, request: Request, background_tasks: BackgroundTasks):
     print(f'creating model with input text: {model.text}')
     cmd = f'python {df_working_directory}/main.py --text "{model.text}" --workspace {model.workspace} --iters {model.iterations}'
     print(cmd)
-    proc = await asyncio.create_subprocess_shell(cmd, stdout=asyncio.subprocess.PIPE)
-    stdout, stderr = await proc.communicate()
+    background_tasks.add_task(run_training, cmd)
     print(request.url)
-    if stderr:
-        raise HTTPException(status_code=404, detail="Could not start training")
     return URL(uri=f'{request.url}/{model.workspace}')
 
 @app.get("/model/{uuid}/obj")
