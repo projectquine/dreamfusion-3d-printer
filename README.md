@@ -7,10 +7,10 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "text": "A plastic toy car"
+  "text": "plastic toy frog on a skateboard wearing a top hat"
 }'
 ```
-This will return us a uri with a uuid that we will use for later requests, so keep that handy.
+This will return us a uri with a `UUID` that we will use for later requests, so keep that handy. Note you can also add `"iterations": 30000` to the request body and increase or decrease the number of iterations. The default is 10000.
 
 To get the object (.obj) file we do a GET:
 ```
@@ -21,6 +21,7 @@ To get the .mtl file we do a GET:
 ```
 curl -X 'GET' 'http://localhost:8000/model/<YOUR_UUID>/mtl' -H 'accept: application/json' --output result.mtl
 ```
+**Note: If the file is not found, the API returns a 404, but curl will just save that response into the output file anyway :/ **
 
 To fetch a results video file, use curl rather than the /docs endpoint:
 ```
@@ -32,7 +33,7 @@ We can also periodically check the validation PNGs to see how the training is go
 curl -X 'GET' 'http://localhost:8000/model/<YOUR_UUID>/validation' -H 'accept: application/json' --output latest-validation.png
 ```
 
-## Setup server:
+## Setup Server:
 
 1. Create an account on lambdalabs.com and create an A100 instance. 
 2. ssh into the instance and run:
@@ -54,3 +55,6 @@ pip install git+https://github.com/NVlabs/nvdiffrast/
 ```
 python main.py --text "a hamburger" --workspace trial -O --iters 100
 ```
+6. `git clone https://github.com/shaunmulligan/df-api.git` into the root where you cloned stable-dreamfusion
+7. To start the server run: `./launch.sh
+
