@@ -21,17 +21,17 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
-async def run_training(cmd):
-    proc = await asyncio.create_subprocess_shell(cmd, stdout=asyncio.subprocess.PIPE)
+async def run_training(model):
+    proc = await asyncio.create_subprocess_shell(f'python {df_working_directory}/main.py --text "{model.text}" --workspace {model.workspace} --iters {model.iterations}', stdout=asyncio.subprocess.PIPE)
     stdout, stderr = await proc.communicate()
     print(stdout)
+    generate = await asyncio.create_subprocess_shell(f'python {df_working_directory}/main.py --workspace {model.workspace} -O --test --save_mesh')
+    stdout, stderr = await generate.communicate()
 
 @app.post("/model/")
 async def create_model(model: Model, request: Request, background_tasks: BackgroundTasks):
     print(f'creating model with input text: {model.text}')
-    cmd = f'python {df_working_directory}/main.py --text "{model.text}" --workspace {model.workspace} --iters {model.iterations}'
-    print(cmd)
-    background_tasks.add_task(run_training, cmd)
+    background_tasks.add_task(run_training, model)
     print(request.url)
     projected_time = (model.iterations/100)*20
     return RUN(uri=f'{request.url}{model.workspace}', time=time.strftime("%H:%M:%S", time.gmtime(projected_time)))

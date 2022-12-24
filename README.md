@@ -56,6 +56,11 @@ pip install git+https://github.com/NVlabs/nvdiffrast/
 ```
 python main.py --text "a hamburger" --workspace trial -O --iters 100
 ```
+6. After the run finished, generate the results and mesh:
+```
+python main.py --workspace trial -O --test --save_mesh
+```
 6. `git clone https://github.com/shaunmulligan/df-api.git` into the root where you cloned stable-dreamfusion
 7. To start the server run: `./launch.sh
+8. To open a port to the internet, you need to request 
 
