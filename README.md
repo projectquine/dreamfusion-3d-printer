@@ -7,7 +7,7 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "text": "plastic toy frog on a skateboard wearing a top hat"
+  "text": "plastic toy frog wearing a top hat"
 }'
 ```
 This will return us a uri with a `UUID` that we will use for later requests, so keep that handy. Note you can also add `"iterations": 30000` to the request body and increase or decrease the number of iterations. The default is 10000.
@@ -62,5 +62,11 @@ python main.py --workspace trial -O --test --save_mesh
 ```
 6. `git clone https://github.com/shaunmulligan/df-api.git` into the root where you cloned stable-dreamfusion
 7. To start the server run: `./launch.sh
-8. To open a port to the internet, you need to request 
-
+8. To open a port to the internet you can use `ngrok` to create a tunnel to the local server:
+```
+ngrok http 8000
+```
+then the output will give you a public url something like:
+```                                                                                         
+Forwarding                    https://ca1f-132-145-142-210.ngrok.io -> http://localhost:8000                                                               
+```
