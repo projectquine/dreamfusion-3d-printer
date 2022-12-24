@@ -32,6 +32,7 @@ We can also periodically check the validation PNGs to see how the training is go
 ```
 curl -X 'GET' 'http://localhost:8000/model/<YOUR_UUID>/validation' -H 'accept: application/json' --output latest-validation.png
 ```
+Note: The validation files are only updated every 3 or 4 minutes, so no point hammering the endpoint :D
 
 ## Setup Server:
 

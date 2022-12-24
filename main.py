@@ -56,7 +56,6 @@ async def get_mtl_file(uuid):
 async def get_result_video_file(uuid):
     dir_path = os.getcwd() +'/'+ uuid + '/results'
     files = glob.glob(dir_path+'/*.mp4')
-    print(files)
     if files == []:
         raise HTTPException(status_code=404, detail="File not found")
     return FileResponse(files[0])
@@ -64,10 +63,8 @@ async def get_result_video_file(uuid):
 @app.get("/model/{uuid}/validation")
 async def get_latest_validation_file(uuid):
     dir_path = os.getcwd() +'/'+ uuid + '/validation'
-    print(dir_path)
     files = glob.glob(dir_path+'/*_rgb.png')
     files.sort(key=lambda x: os.path.getmtime(x))
-    print(files)
     if files == []:
         raise HTTPException(status_code=404, detail="File not found")
     return FileResponse(files[-1])
