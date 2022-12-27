@@ -4,11 +4,11 @@ import itertools
 import sys
 from PIL import Image
 
-PASSES = 30
-ANTIALIASING = 2
+PASSES = 2
+SCAN_RANGE = 2
 
 # TODO: Convert pixel loops into vectorized operations to make the script run much faster.
-# TODO: OPTIONAL: Parametrize "PASSES" logic.
+# TODO: OPTIONAL: Parametrize "PASSES" and "SCAN_RANGE" logic.
 # TODO: OPTIONAL: Refactor "PASSES" logic so it doesn't save->load over and over. Then again, this does allow for graceful interruption of the process... TBD
 # TODO: OPTIONAL: Implement variations. Currently it just flips pixels to their median surrounding color. Alternatives are: Median (excluding diagonals); Median (excluding self); Supermajority; Stateful (takes preceding pixel results into account before waiting for full iteration); Chaotic (pick random neighboring color).
 # TODO: OPTIONAL: Complex setups. f.e. "Run 10 passes at scan range 1, then 20 passes at scan range 2". This can be done easily using CLI, so it's low prio.
@@ -35,7 +35,7 @@ class MedianFilter:
                 filtered_pixels[x, y] = median_color
 
         # Save the filtered image
-        filtered_image.save('filtered.png')
+        filtered_image.save('albedo.png')
 
     def get_surrounding_pixels(self, x, y):
         return [
@@ -45,7 +45,7 @@ class MedianFilter:
         ]
 
     def scan(self, coord):
-        return range(coord - ANTIALIASING, coord + (ANTIALIASING + 1))
+        return range(coord - SCAN_RANGE, coord + (SCAN_RANGE + 1))
 
     def get_median_color(self, pixels):
         # Sort the pixels by their red, green, and blue values
@@ -57,7 +57,8 @@ class MedianFilter:
 def main(filename):
     for i in range(PASSES):
         # Open the image file
-        image = Image.open(filename if i == 0 else 'filtered.png')
+        # image = Image.open(filename if i == 0 else 'filtered.png')
+        image = Image.open(filename)
         # Create a MedianFilter object for the image
         median_filter = MedianFilter(image)
         # Apply the median filter to the image

@@ -1,3 +1,7 @@
+# This script takes the name of the ".png" file as a command-line argument, opens the file using the Python Imaging Library (PIL), downsamples the colors in the image to their nearest neighboring buckets (currently the minmax RGB values, AKA 0.0.255; 255.0.255; etc), and saves the source image to a new file called "original.png".
+
+# TODO: Add bias for extreme RGB values, so hues that are perceived by the human eye are biased towards color rather than towards pure black or pure white. For example, if a pixel's RGB values are 10.120.10, the current implementation will downscale it to 0.0.0, but it makes much more sense to downscale it to 0.255.0, even though that's technically not the nearest "rounded" color.
+
 import sys
 from PIL import Image
 
@@ -33,13 +37,13 @@ def main(filename):
     image = Image.open(filename)
     # Downsample the colors in the image
     downsampled_image = downsample_colors(image)
+    # image.save('albedo_original.png')
     # Save the downsampled image to a new file
-    image.save('original.png')
     downsampled_image.save(filename)
 
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print('Usage: python png_downsampler.py <filename>.png')
+        print('Usage: python downsample_colors.py /path/to/albedo.png')
         sys.exit(1)
     main(sys.argv[1])
