@@ -7,7 +7,8 @@ from PIL import Image
 PASSES = 2
 SCAN_RANGE = 2
 
-# TODO: Convert pixel loops into vectorized operations to make the script run much faster.
+# TODO: Find better ways to cleanup small color regions. Currently it's doing it by looking at the 2D texture, which is an okay way to do it for small corrections, but produces noticeable mistakes at higher iterations because the 2D file is not aware of how it maps onto 3D voxels which causes it to generate false positives/negatives. There are some quick&dirty ways to fix this (defrag texture) but ultimately this'll require a rewrite to a purely 3D implementation if we want to do it right.
+# TODO: OPTIONAL: Convert loops into vectorized operations to make the script run much faster.
 # TODO: OPTIONAL: Parametrize "PASSES" and "SCAN_RANGE" logic.
 # TODO: OPTIONAL: Refactor "PASSES" logic so it doesn't save->load over and over. Then again, this does allow for graceful interruption of the process... TBD
 # TODO: OPTIONAL: Implement variations. Currently it just flips pixels to their median surrounding color. Alternatives are: Median (excluding diagonals); Median (excluding self); Supermajority; Stateful (takes preceding pixel results into account before waiting for full iteration); Chaotic (pick random neighboring color).

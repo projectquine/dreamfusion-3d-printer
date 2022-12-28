@@ -17,16 +17,13 @@ def get_unique_pixel_rgb_values(image_filename):
 def split_colors(mesh_filepath, output_dir):
 
     albedo_filepath = os.path.join(os.path.dirname(mesh_filepath), 'albedo.png')
-    # print(albedo_filepath)
-
 
     # # Get the unique pixel RGB values
     unique_pixel_rgb_values = get_unique_pixel_rgb_values(albedo_filepath)
     if 1 > len(unique_pixel_rgb_values) > 32:
         raise NotImplementedError(f'File contains {len(unique_pixel_rgb_values)} unique colors, which is currently unsupported. Downsample the image to a range of colors supported by prusaslicer.')
 
-    for pixel in unique_pixel_rgb_values:
-        r, g, b = pixel
+    for r, g, b in unique_pixel_rgb_values:
 
         # Create output directory for this RGB value
         output_subdir = os.path.join(os.path.dirname(output_dir), f'{r}_{g}_{b}/')
