@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException, Request, BackgroundTasks
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
-df_working_directory = '/home/ubuntu/stable-dreamfusion'
+df_working_directory = '/home/ubuntu/df-api/stable-dreamfusion'
 
 class Model(BaseModel):
     text: str

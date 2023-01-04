@@ -1,1 +1,3 @@
 pymeshlab
+uvicorn
+fastapi
